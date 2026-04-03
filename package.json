@@ -1,0 +1,19 @@
+{
+  "name": "claude-annotator",
+  "version": "1.0.0",
+  "description": "Extensão Chrome para anotar áreas de páginas web e enviar directamente para o Claude CLI via canal local MCP.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "canvas": "^3.2.3"
+  }
+}

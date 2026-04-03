@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      width: 300px;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: #1c1917;
+      color: #fafaf9;
+      padding: 0;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 16px 12px;
+      border-bottom: 1px solid #44403c;
+    }
+
+    .header svg {
+      width: 28px;
+      height: 28px;
+      color: #d97706;
+      flex-shrink: 0;
+    }
+
+    .header .title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #d97706;
+      letter-spacing: -0.3px;
+    }
+
+    .header .subtitle {
+      font-size: 11px;
+      color: #a8a29e;
+      margin-top: 1px;
+    }
+
+    .body {
+      padding: 16px;
+    }
+
+    .status-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .status-label {
+      font-size: 12px;
+      color: #a8a29e;
+    }
+
+    .status-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-right: 6px;
+      vertical-align: middle;
+    }
+
+    .status-dot.active { background: #22c55e; }
+    .status-dot.inactive { background: #44403c; }
+
+    .status-value {
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+      margin-bottom: 8px;
+    }
+
+    .btn-primary {
+      background: #d97706;
+      color: #fff;
+    }
+    .btn-primary:hover { background: #b45309; }
+
+    .btn-danger {
+      background: transparent;
+      color: #ef4444;
+      border: 1px solid #ef4444;
+    }
+    .btn-danger:hover { background: rgba(239,68,68,0.1); }
+
+    .shortcut-hint {
+      text-align: center;
+      font-size: 11px;
+      color: #78716c;
+      margin-top: 8px;
+    }
+
+    .shortcut-hint kbd {
+      background: #292524;
+      border: 1px solid #44403c;
+      padding: 1px 6px;
+      border-radius: 3px;
+      font-family: 'Cascadia Code', monospace;
+      font-size: 10px;
+      color: #a8a29e;
+    }
+
+    .instructions {
+      padding: 12px 16px;
+      border-top: 1px solid #44403c;
+      font-size: 11px;
+      color: #78716c;
+      line-height: 1.5;
+    }
+
+    .instructions ol {
+      padding-left: 16px;
+    }
+
+    .instructions li {
+      margin-bottom: 4px;
+    }
+
+    .instructions strong {
+      color: #a8a29e;
+    }
+
+    .server-section {
+      margin-bottom: 16px;
+    }
+
+    .section-label {
+      font-size: 11px;
+      color: #78716c;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    .server-row {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .server-select {
+      flex: 1;
+      background: #292524;
+      border: 1px solid #44403c;
+      color: #fafaf9;
+      font-family: inherit;
+      font-size: 12px;
+      padding: 7px 10px;
+      border-radius: 6px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .server-select:focus { border-color: #d97706; }
+
+    .btn-icon {
+      background: #292524;
+      border: 1px solid #44403c;
+      color: #a8a29e;
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.15s;
+    }
+
+    .btn-icon:hover { border-color: #d97706; color: #d97706; }
+    .header-right { margin-left: auto; flex-shrink: 0; }
+    .btn-lang { background: #292524; border: 1px solid #44403c; color: #a8a29e; font-family: inherit; font-size: 10px; font-weight: 700; padding: 3px 7px; border-radius: 4px; cursor: pointer; letter-spacing: 0.5px; transition: all 0.15s; }
+    .btn-lang:hover { border-color: #d97706; color: #d97706; }
+    .mcp-status-row { display: flex; align-items: center; gap: 6px; margin-top: 6px; font-size: 11px; color: #78716c; }
+    .mcp-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #44403c; flex-shrink: 0; }
+    .mcp-dot.connected { background: #22c55e; }
+    .mcp-dot.disconnected { background: #ef4444; }
+    .pending-badge { font-size: 11px; color: #d97706; font-weight: 600; margin-bottom: 4px; display: none; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+      <line x1="9" y1="9" x2="15" y2="9"/>
+      <line x1="12" y1="6" x2="12" y2="12"/>
+    </svg>
+    <div>
+      <div class="title">Claude Page Annotator</div>
+      <div class="subtitle" id="subtitle">Anotar &middot; Analisar &middot; Corrigir</div>
+    </div>
+    <div class="header-right">
+      <button class="btn-lang" id="btn-lang">EN</button>
+    </div>
+  </div>
+
+  <div class="body">
+    <div class="server-section">
+      <div class="section-label" id="label-server">Servidor MCP</div>
+      <div class="server-row">
+        <select id="server-select" class="server-select">
+          <option value="">A procurar servidores&hellip;</option>
+        </select>
+        <button class="btn-icon" id="btn-scan" title="Actualizar">&#8635;</button>
+      </div>
+      <div class="mcp-status-row">
+        <span class="mcp-dot" id="mcp-dot"></span>
+        <span id="mcp-status-text"></span>
+      </div>
+      <div id="server-error" style="display:none; font-size:11px; color:#ef4444; margin-top:4px; line-height:1.4;">
+        Nenhum servidor encontrado. Corre: node mcp/server.js
+      </div>
+    </div>
+
+    <div class="status-row">
+      <span class="status-label" id="label-status">Estado</span>
+      <span class="status-value" id="status-text">
+        <span class="status-dot inactive" id="status-dot"></span>
+        <span id="status-label">Inativo</span>
+      </span>
+    </div>
+
+    <button class="btn btn-primary" id="btn-toggle">&#9654; Ativar Anotador</button>
+    <div class="pending-badge" id="pending-badge"></div>
+    <button class="btn btn-danger" id="btn-export" style="display:none;">&#8679; Enviar para CLI</button>
+    <div id="cli-error" style="display:none; font-size:11px; color:#ef4444; margin-bottom:8px; line-height:1.4;"></div>
+
+    <div class="shortcut-hint">
+      Atalho: <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Y</kbd>
+    </div>
+  </div>
+
+  <div class="instructions">
+    <ol>
+      <li><strong id="instr-1-bold">Selecciona</strong> <span id="instr-1-text">o servidor MCP</span></li>
+      <li><strong id="instr-2-bold">Ativa</strong> <span id="instr-2-text">o anotador</span></li>
+      <li><strong id="instr-3-bold">Seleciona</strong> <span id="instr-3-text">uma &aacute;rea da p&aacute;gina (arrastar)</span></li>
+      <li><strong id="instr-4-bold">Envia</strong> <span id="instr-4-text">as anota&ccedil;&otilde;es para o Claude CLI</span></li>
+    </ol>
+  </div>
+
+  <script src="i18n.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

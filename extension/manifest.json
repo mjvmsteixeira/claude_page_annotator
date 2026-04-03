@@ -1,0 +1,52 @@
+{
+  "manifest_version": 3,
+  "name": "Annotator for Claude",
+  "version": "2.2.0",
+  "description": "Anota áreas de páginas web e envia directamente para o Claude CLI via canal MCP local.",
+  "permissions": ["activeTab", "storage", "scripting"],
+  "host_permissions": [
+    "http://localhost:3847/*",
+    "http://localhost:3848/*",
+    "http://localhost:3849/*",
+    "http://localhost:3850/*",
+    "http://localhost:3851/*",
+    "http://localhost:3852/*",
+    "http://localhost:3853/*",
+    "http://localhost:3854/*",
+    "http://localhost:3855/*",
+    "http://localhost:3856/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "css": ["content.css"],
+      "js": ["i18n.js", "content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "commands": {
+    "toggle-annotator": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+Y",
+        "mac": "Command+Shift+Y"
+      },
+      "description": "Ativar/desativar o modo de anotação"
+    }
+  }
+}
